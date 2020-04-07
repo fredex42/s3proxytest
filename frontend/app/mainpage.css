@@ -1,0 +1,44 @@
+body {
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
+div.browser-container {
+    display: grid;
+    grid-auto-columns: 25%;
+    grid-auto-rows: 10%;
+}
+
+div.error-container {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    text-align: center;
+    height: 2em;
+    overflow: hidden;
+}
+
+div.folder-list-container {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 10;
+}
+
+div.file-list-container {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 10;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.error {
+    color: darkred;
+}
+
+.warning {
+    color: darkorange;
+}

@@ -1,0 +1,28 @@
+ul.recursive-tree {
+    list-style: none;
+}
+
+.folder-icon {
+    color: darkblue;
+}
+
+.file-icon {
+    color: #5b80b2;
+}
+
+.icon-padding {
+    padding-right: 0.6em;
+}
+
+.spinner {
+    animation: lds-spinner 1.2s linear infinite;
+}
+
+@keyframes lds-spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

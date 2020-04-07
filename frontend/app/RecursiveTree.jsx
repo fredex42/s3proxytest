@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import treecss from './recursive-tree.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import FolderIcon from "./FolderIcon.jsx";
 
 class RecursiveTree extends React.Component {
     static propTypes = {
@@ -7,7 +10,8 @@ class RecursiveTree extends React.Component {
         item: PropTypes.string,
         userDidSelect: PropTypes.func.isRequired,
         loadDidError: PropTypes.func.isRequired,
-        basePadding: PropTypes.number
+        basePadding: PropTypes.number,
+        paddingOffset: PropTypes.number
     };
 
     constructor(props) {
@@ -61,11 +65,17 @@ class RecursiveTree extends React.Component {
                     return this.loadSubDirs();
                 } else {
                     console.log("load completed");
-                    return
+                    return this.setStatePromise({isLoaded: true, loading: false});
                 }
             default:
                 const error_content = await response.text();
                 this.props.loadDidError(error_content);
+        }
+    }
+
+    componentDidMount() {
+        if(this.props.level===0) { //display root level subfolders at startup
+            this.loadSubDirs();
         }
     }
 
@@ -83,20 +93,27 @@ class RecursiveTree extends React.Component {
 
     render() {
         const basePadding = this.props.basePadding ? this.props.basePadding : 6;
-        const requiredPadding = basePadding * this.props.level;
+        const paddingOffset = this.props.paddingOffset ? this.props.paddingOffset : 0;
+
+        const requiredPadding = this.level===0 ? 0 : paddingOffset + (basePadding * this.props.level);
         return <ul className="recursive-tree" style={{paddingLeft: requiredPadding + "px"}}>
-            <li key={"tree:" + this.props.level} className="recursive-tree-label clickable" onClick={this.userSelectedTreenode}>{this.props.item ? this.props.item : "(root)"}</li>
+            <li key={"tree:" + this.props.level} className="recursive-tree-label clickable" onClick={this.userSelectedTreenode}>
+                <FolderIcon isLoading={this.state.loading} isOpen={this.state.isLoaded}/>
+                {this.props.item ? this.props.item : "(root)"}
+            </li>
             {
                 this.state.knownDirs.map((subpath,idx)=>{
                     console.log("adding ", subpath, idx);
                     const uniqueId = "tree:" + this.props.level + ":" + idx;
                     return <li key={uniqueId}>
+
                         <RecursiveTree
                             level={this.props.level+1}
                             item={subpath}
                             userDidSelect={this.props.userDidSelect}
                             loadDidError={this.props.loadDidError}
                             basePadding={this.props.basePadding}
+                            paddingOffset={this.props.paddingOffset}
                         />
                     </li>
                 })

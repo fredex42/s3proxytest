@@ -1,6 +1,12 @@
 import React from "react";
 import {render} from 'react-dom';
 import RecursiveTree from "./RecursiveTree.jsx";
+import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import maincss from './mainpage.css';
+import {library} from "@fortawesome/fontawesome-svg-core";
+import {faFolder, faFolderOpen,faFileAlt, faFile, faSpinner} from "@fortawesome/free-solid-svg-icons";
+
+library.add(faFolder, faFolderOpen, faFileAlt, faFile, faSpinner);
 
 class App extends React.Component {
     constructor(props) {
@@ -19,54 +25,6 @@ class App extends React.Component {
         this.userDidSelect = this.userDidSelect.bind(this);
     }
 
-    // buildUrl() {
-    //     const baseUrl = "/list";
-    //     let args = {};
-    //     if(this.state.currentSelectedPath && this.state.currentSelectedPath!==""){
-    //         args["prefix"] = this.state.currentSelectedPath;
-    //     }
-    //     if(this.state.continuationToken){
-    //         args["cont"] = this.state.continuationToken;
-    //     }
-    //
-    //     if(Object.keys(args).length>0) {
-    //         const argStrings = Object.keys(args).map(k=>k + "=" + encodeURIComponent(args[k]));
-    //         return baseUrl + "?" + argStrings.join("&");
-    //     } else {
-    //         return baseUrl;
-    //     }
-    // }
-    //
-    // setStatePromise(newstate) {
-    //     return new Promise((resolve, reject)=>this.setState(newstate, ()=>resolve()))
-    // }
-    //
-    // async loadNextPage() {
-    //     if(!this.state.loading) await this.setStatePromise({loading: true});
-    //     const result = await fetch(this.buildUrl());
-    //     switch(result.status) {
-    //         case 200:
-    //             const content = await result.json();
-    //             await this.setStatePromise(prevState=>{
-    //                 const updatedFiles = prevState.knownFiles.length>=1000 ? prevState.knownFiles : prevState.knownFiles.concat(content.files);
-    //                 return {knownDirs: prevState.knownDirs.concat(content.dirs ? content.dirs.map(entry=>entry.Prefix) : []), knownFiles: updatedFiles, continuationToken: content.continuationToken, loading: content.isTruncated}
-    //             });
-    //             if(content.isTruncated){
-    //                 return this.loadNextPage();
-    //             } else {
-    //                 console.log("load completed");
-    //                 return
-    //             }
-    //         default:
-    //             const errorContent = await result.text();
-    //             return this.setStatePromise({loading: false, lastError: errorContent})
-    //     }
-    // }
-    //
-    // componentDidMount() {
-    //     this.loadNextPage();
-    // }
-
     customURIDecode(str) {
         const decoded = decodeURIComponent(str);
         const space_replaced = decoded.replace('+',' ');
@@ -84,16 +42,16 @@ class App extends React.Component {
     }
 
     render() {
-        return <div>
-            <div className="error">
+        return <div className="browser-container">
+            <div className="error-container">
                 <span className="error">{this.state.lastError ? this.state.lastError : ""}</span>
                 <span className="warning">{this.state.knownFiles.length>=5000 ? "Already showing a maximum of 5,000 files" : ""}</span>
             </div>
-            <div className="folder-list">
-                <RecursiveTree level={0} item={null} userDidSelect={this.userDidSelect} loadDidError={this.loadDidError}/>
+            <div className="folder-list-container">
+                <RecursiveTree level={0} item={null} userDidSelect={this.userDidSelect} loadDidError={this.loadDidError} paddingOffset={6}/>
             </div>
 
-            <div className="file-list">
+            <div className="file-list-container">
                 <ul className="file-list">
                     {
                         this.state.knownFiles.map((fileRec,idx)=>fileRec ? <li key={idx}>{this.customURIDecode(fileRec.Key)}</li> : <li key={idx}>(null entry)</li>)
