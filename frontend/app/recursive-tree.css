@@ -10,6 +10,9 @@ ul.recursive-tree {
     color: #5b80b2;
 }
 
+.file-list {
+    list-style: none;
+}
 .icon-padding {
     padding-right: 0.6em;
 }

@@ -4,9 +4,10 @@ import RecursiveTree from "./RecursiveTree.jsx";
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import maincss from './mainpage.css';
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faFolder, faFolderOpen,faFileAlt, faFile, faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {faFolder, faFolderOpen,faFileAlt, faFile, faSpinner, faGreaterThan} from "@fortawesome/free-solid-svg-icons";
+import FileList from "./FileList.jsx";
 
-library.add(faFolder, faFolderOpen, faFileAlt, faFile, faSpinner);
+library.add(faFolder, faFolderOpen, faFileAlt, faFile, faSpinner, faGreaterThan);
 
 class App extends React.Component {
     constructor(props) {
@@ -25,19 +26,16 @@ class App extends React.Component {
         this.userDidSelect = this.userDidSelect.bind(this);
     }
 
-    customURIDecode(str) {
-        const decoded = decodeURIComponent(str);
-        const space_replaced = decoded.replace('+',' ');
-        return space_replaced;
-    }
-
     loadDidError(err) {
         this.setState({loading: false, lastError: err})
     }
 
-    userDidSelect(newFileList) {
+    userDidSelect(newFileList, newPath) {
+        console.log("selected ", newFileList.length, " files at  ", newPath);
+        const p = newPath ? newPath : "";
         this.setState({
-            knownFiles: newFileList
+            knownFiles: newFileList,
+            currentSelectedPath: newPath
         })
     }
 
@@ -52,12 +50,7 @@ class App extends React.Component {
             </div>
 
             <div className="file-list-container">
-                <ul className="file-list">
-                    {
-                        this.state.knownFiles.map((fileRec,idx)=>fileRec ? <li key={idx}>{this.customURIDecode(fileRec.Key)}</li> : <li key={idx}>(null entry)</li>)
-                    }
-                </ul>
-                { this.state.knownFiles.length===0 ? <span className="error">No files found here</span> : <span/> }
+                <FileList knownFiles={this.state.knownFiles} selectedPath={this.state.currentSelectedPath}/>
             </div>
         </div>
     }

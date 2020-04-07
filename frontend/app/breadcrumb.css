@@ -1,0 +1,17 @@
+ul.breadcrumb-list {
+    list-style: none;
+}
+
+li.breadcrumb-entry {
+    display:inline;
+    padding-right: 0.6em;
+}
+
+.breadcrumb-icon-padding {
+    padding-right: 0.2em;
+}
+
+.breadcrumb-end-padding {
+    padding-left: 0.4em;
+    padding-right: 0.1em;
+}

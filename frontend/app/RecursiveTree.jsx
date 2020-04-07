@@ -82,12 +82,12 @@ class RecursiveTree extends React.Component {
     userSelectedTreenode(evt) {
         console.log("userSelectedTreenode");
         if(!this.state.isLoaded){
-            this.loadSubDirs().then(()=>this.props.userDidSelect(this.state.knownFiles)).catch(err=>{
+            this.loadSubDirs().then(()=>this.props.userDidSelect(this.state.knownFiles, this.props.item)).catch(err=>{
                 console.error(err);
                 this.props.loadDidError(err);
             });
         } else {
-           this.props.userDidSelect(this.state.knownFiles);
+           this.props.userDidSelect(this.state.knownFiles, this.props.item);
         }
     }
 
