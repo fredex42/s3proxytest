@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import treecss from './recursive-tree.css';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import FolderIcon from "./FolderIcon.jsx";
 
 class RecursiveTree extends React.Component {
@@ -11,7 +10,8 @@ class RecursiveTree extends React.Component {
         userDidSelect: PropTypes.func.isRequired,
         loadDidError: PropTypes.func.isRequired,
         basePadding: PropTypes.number,
-        paddingOffset: PropTypes.number
+        paddingOffset: PropTypes.number,
+        showFullPath: PropTypes.bool
     };
 
     constructor(props) {
@@ -91,6 +91,22 @@ class RecursiveTree extends React.Component {
         }
     }
 
+    labelForDisplay() {
+        if(this.props.item) {
+            if(this.props.showFullPath) {
+                return this.props.item;
+            } else {
+                const parts = this.props.item.split("/");
+                const idx = parts.length-2;
+                console.log(parts);
+                console.log(idx);
+                return parts[idx];
+            }
+        } else {
+            return "(root)"
+        }
+    }
+
     render() {
         const basePadding = this.props.basePadding ? this.props.basePadding : 6;
         const paddingOffset = this.props.paddingOffset ? this.props.paddingOffset : 0;
@@ -99,7 +115,7 @@ class RecursiveTree extends React.Component {
         return <ul className="recursive-tree" style={{paddingLeft: requiredPadding + "px"}}>
             <li key={"tree:" + this.props.level} className="recursive-tree-label clickable" onClick={this.userSelectedTreenode}>
                 <FolderIcon isLoading={this.state.loading} isOpen={this.state.isLoaded}/>
-                {this.props.item ? this.props.item : "(root)"}
+                {this.labelForDisplay()}
             </li>
             {
                 this.state.knownDirs.map((subpath,idx)=>{
